@@ -1,0 +1,175 @@
+from tensorflow.keras.preprocessing.image import img_to_array, load_img
+from tensorflow.keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input, BatchNormalization
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.optimizers import SGD
+import asyncio
+import pandas as pd
+import numpy as np
+import os
+import tensorflow as tf
+import keras
+from tensorflow import keras
+from tensorflow.keras.preprocessing.image import img_to_array, load_img
+from tensorflow.keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, Input, BatchNormalization
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.optimizers import SGD
+import warnings
+from aiogram import Bot, Dispatcher, types
+import logging
+from aiogram.enums import ParseMode
+from aiogram.filters.command import Command
+from aiogram import Router, F
+from aiogram.fsm.state import StatesGroup, State
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.storage.base import StorageKey
+from aiogram import F
+from aiogram.client.bot import DefaultBotProperties
+import warnings
+import seaborn as sns
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+import tensorflow as tf
+from tensorflow.keras.models import Model
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.metrics import Precision, Recall
+from PIL import Image
+import zipfile
+import os
+import tensorflow_hub as hub
+
+hub.KerasLayer.trainable = True
+
+
+'''zip_file_path = r'''''
+
+'''
+extraction_folder = 'Ии/СС'
+
+
+with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+    zip_ref.extractall(extraction_folder)
+
+extraction_folder = 'Ии/СС'
+images = []
+labels = []
+
+for folder_name in os.listdir(extraction_folder):
+    folder_path = os.path.join(extraction_folder, folder_name)
+
+    if os.path.isdir(folder_path):
+        for i in range(23200):
+            labels.append(folder_name)
+        for file_name in os.listdir(folder_path):
+            if file_name.lower().endswith(
+                    ('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+                images.append(os.path.join(folder_path, file_name))'''
+
+
+
+def load_image(image_path, img_size=(64, 64)):
+    image = load_img(image_path, target_size=img_size)
+    image = img_to_array(image)
+    return image
+
+
+
+images = []
+labels = []
+
+
+
+data = 'AA'
+for label_dir in os.listdir(data):
+    if os.path.isdir(os.path.join(data, label_dir)):
+        for fle in os.listdir(os.path.join(data, label_dir)):
+            image_path = os.path.join(data, label_dir, fle)
+            images.append(load_image(image_path))
+            labels.append(label_dir)
+
+
+
+
+print(labels)
+
+import numpy as np
+
+images = np.array(images)
+labels = np.array(labels)
+from sklearn.preprocessing import LabelEncoder
+
+label_encoder = LabelEncoder()
+labels_encoded = label_encoder.fit_transform(labels)
+num_classes = len(label_encoder.classes_)
+labels_categorical = to_categorical(labels_encoded, num_classes)
+
+images = images.astype('float32')
+img_rows = images[0].shape[0]
+img_cols = images[0].shape[1]
+input_shape = (img_rows, img_cols, 3)
+
+images /= 255.0
+
+X_train, X_test, y_train, y_test = train_test_split(images, labels_categorical, test_size=0.2, random_state=42,
+                                                    shuffle=True)
+
+model = Sequential()
+
+model.add(Conv2D(32, kernel_size=(3, 3),
+                 activation='relu',
+                 input_shape=input_shape))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Conv2D(64, (3, 3), activation='relu'))
+
+model.add(MaxPooling2D(pool_size=(2, 2)))
+model.add(Flatten())
+model.add(Dense(128, activation='relu'))
+model.add(Dense(5, activation='softmax'))
+model.compile(loss='categorical_crossentropy',
+              optimizer='Adam',
+              metrics=['accuracy'])
+
+print(model.summary())
+
+history = model.fit(X_train, y_train, batch_size = 64,
+                              epochs = 3,
+                              validation_data = (X_test, y_test))
+ 
+model.save("my_model.keras")
+
+
+'''model = keras.models.load_model("my_model.keras")'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
